@@ -1,0 +1,108 @@
+---
+import { getCollection, render } from "astro:content";
+import Layout from "../../layouts/Layout.astro";
+
+export async function getStaticPaths() {
+  const posts = await getCollection("blog");
+
+  return posts.map((post) => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+---
+
+<Layout title={`${post.data.title} | Writing`}>
+  <main class="mx-auto w-full max-w-4xl px-6 py-12">
+    <a href="/writing" class="text-sm text-blue-700 hover:underline">
+      ← Back to Writing
+    </a>
+    <article class="markdown mt-6 rounded-lg bg-white p-8 shadow-sm">
+      <h1>{post.data.title}</h1>
+      <p class="text-sm text-gray-500">
+        {post.data.date.toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+          timeZone: "UTC",
+        })}
+      </p>
+      <Content />
+    </article>
+  </main>
+</Layout>
+
+<style>
+  .markdown :global(h1) {
+    margin: 0 0 0.5rem 0;
+    font-size: 2rem;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  .markdown :global(h2) {
+    margin: 2rem 0 0.75rem 0;
+    font-size: 1.5rem;
+    font-weight: 600;
+  }
+
+  .markdown :global(h3) {
+    margin: 1.5rem 0 0.5rem 0;
+    font-size: 1.2rem;
+    font-weight: 600;
+  }
+
+  .markdown :global(p) {
+    margin: 1rem 0;
+    line-height: 1.75;
+  }
+
+  .markdown :global(ul),
+  .markdown :global(ol) {
+    margin: 1rem 0 1rem 1.5rem;
+  }
+
+  .markdown :global(ul) {
+    list-style: disc;
+  }
+
+  .markdown :global(ol) {
+    list-style: decimal;
+  }
+
+  .markdown :global(li) {
+    margin: 0.35rem 0;
+  }
+
+  .markdown :global(a) {
+    color: #1d4ed8;
+    text-decoration: underline;
+  }
+
+  .markdown :global(table) {
+    width: 100%;
+    margin: 1.5rem 0;
+    border-collapse: collapse;
+  }
+
+  .markdown :global(th),
+  .markdown :global(td) {
+    border: 1px solid #d1d5db;
+    padding: 0.6rem;
+    text-align: left;
+  }
+
+  .markdown :global(th) {
+    background: #f3f4f6;
+  }
+
+  .markdown :global(img) {
+    margin: 1.5rem 0;
+    max-width: 100%;
+    height: auto;
+    border-radius: 0.5rem;
+  }
+</style>
