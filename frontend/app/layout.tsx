@@ -22,6 +22,7 @@ export default function RootLayout({
             <a href="/" className="text-lg font-semibold">Neng Li</a>
             <div className="flex items-center gap-6 text-sm font-medium">
               <a href="/" className="text-gray-700 hover:text-gray-900">Home</a>
+              <a href="/projects" className="text-gray-700 hover:text-gray-900">Projects</a>
               <a href="/writing" className="text-gray-700 hover:text-gray-900">Writing</a>
             </div>
           </nav>
