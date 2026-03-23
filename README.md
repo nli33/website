@@ -1,3 +1,3 @@
 # Personal Website
 
-Made with Astro + TailwindCSS + FastAPI  
+Made with Next.js + TailwindCSS + FastAPI  
