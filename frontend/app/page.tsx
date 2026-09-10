@@ -4,7 +4,7 @@ export default function Home() {
       <section className="hero mb-12">
         <h1 className="mb-6 font-serif text-5xl font-semibold text-ink">Neng Li</h1>
         <p className="mb-4 text-xl text-ink/80">
-          Hi! I&apos;m Neng. I&apos;m a Software Engineering student @ University of Waterloo.
+          Hi! I&apos;m Neng. I&apos;m a 2A Software Engineering student @ University of Waterloo.
         </p>
         <p className="text-xl text-ink/80">
           I&apos;m passionate about systems programming &amp; ML, and I'm currently seeking Winter 2027 opportunities.
