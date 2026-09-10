@@ -46,7 +46,7 @@ examples of some interesting things I learned during the process:
 
     $PE_{(pos, 2i+1)} = \cos(pos / 10000^{2i/d_{model}})$
 
-    not only because sinusoids are linear combinations of each other (as stated in the paper); but also, different frequencies can help capture position at different scales, and help encode position more uniquely.
+    the paper's own justification is that this lets the model learn to attend by relative position: for any fixed offset `k`, `PE(pos+k)` can be written as a linear function of `PE(pos)`. on top of that, using many different frequencies lets the encoding capture position at multiple scales at once instead of just one.
 
 ## Training and eval
 
@@ -80,7 +80,7 @@ This one turned out to be much more difficult than the previous one.
 
 After a ton of training, the loss and accuracy both fluctuated wildly. The model particularly struggled with sequences of varying length, since sorting a length-5 sequence is a far easier problem than a length 20+. 
 
-What's more: since sorting is an algorithmic problem and not a pattern-matching one, it fundamentally doesn't come naturally to transformers. In particular, the model doesn't even understand that `3` > `2`, since both of these tokens are merely vectors learned during training. Implement train-of-thought might help with this problem, but for now my model only learned an incredibly fuzzy version of "sorting".
+What's more: since sorting is an algorithmic problem and not a pattern-matching one, it doesn't come naturally to a model this small and undertrained. In particular, the model doesn't even understand that `3` > `2`, since both of these tokens are merely vectors learned during training. Chain-of-thought might help with this problem, but for now my model only learned an incredibly fuzzy version of "sorting".
 
 So, in order, the things I tried to improve:
 
@@ -93,11 +93,11 @@ Finally, the best improvement I made was implementing batching. Without batching
 
 With batching, the model sees a wider range of examples; each gradient is now from a mix of easy and hard examples, meaning the model more reliably improves for the whole task. 
 
-There was also the secondary effect that batching would speed up training, after I vectorized batching in the model.
+I later tried to also make batching speed up training (vectorizing it so a batch runs as one matmul instead of looping over examples). It didn't immediately improve -- padding shorter sequences up to the batch's longest sequence ate most of the gain, and it took a couple more rounds of fixes (grouping similar-length examples together, then vectorizing attention itself) before it was actually faster than the simple version.
 
 ![good sort](/blog/transformer/good_sort.png)
 
-With these changes, the model improved a lot on the sorting task, though the inherent limitations of transformers remained. 
+With these changes, the model improved a lot on the sorting task, though the limitations from its small size remained. 
 
 ### 3. shakespeare "chatbot"
 
@@ -105,7 +105,7 @@ For the previous two examples, we had an objective measure of correctness. For r
 
 so for the third task, I wanted something closer to that: real English text instead of a synthetic alphabet. I landed on a dialogue task using [tinyshakespeare.txt](https://github.com/karpathy/char-rnn/blob/master/data/tinyshakespeare/input.txt): given one speaker's line, predict the next speaker's line. 
 
-Concretely, the data pipeline splits the play text into turns, keeps only the blocks that start with a speaker name (`"ROMEO:"`), and pairs up consecutive turns -- turn *i* becomes the input, turn *i+1* becomes the target. This is a step up from reverse/sort: there's no fixed vocabulary or algorithmic ground truth to fall back on, just "however Shakespeare's characters actually talk to each other".
+Concretely, the data pipeline splits the play text into turns, keeps only the blocks that start with a speaker name (`"ROMEO:"`), and pairs up consecutive turns -- turn *i* becomes the input, turn *i+1* becomes the target. This is a step up from reverse/sort: there's no small synthetic alphabet or algorithmic ground truth to fall back on, just "however Shakespeare's characters actually talk to each other".
 
 Architecturally I didn't change much -- same model, same hyperparameters that worked for sort. I also kept char-level tokenization instead of something fancier.
 
@@ -119,9 +119,9 @@ I added a 90/10 train/validation split, so I could measure overfitting instead o
 
 Here was probably the biggest lesson of the whole project:
 
-I trained on both the small and the big corpus, same hyperparameters and same setup. They took a similar number of passes over their data, but the bigger, more varied dataset ended up noticeably better on validation than the smaller one. Same architecture, same amount of training, but better data led to a better result. 
+I trained on both the small and the big corpus, same architecture, same hyperparameters, no other changes. They took a similar number of passes over their data, but the bigger, more varied dataset ended up noticeably better on validation than the smaller one. Same model, same setup, but better data led to a better result. 
 
-In other words: for this project, throwing more/better data at the model mattered more than making the model bigger or training it longer.
+In other words: for this project, throwing more/better data at the model, without touching the model itself at all, was enough to meaningfully improve it.
 
 Beyond this project, this probably means that pretraining data is at least as important (if not more important) than model architecture, but that might be something i need to empirically verify on my own.
 
@@ -132,8 +132,13 @@ A small problem once I started generating longer completions: the model kept get
 This turned out to be an inference problem: I was always picking the single most likely next character (always taking argmax from logits). once the model gets slightly attached to a short phrase, always picking the "best" option puts it in a loop. The fix was to sample from a distribution instead of always picking the top choice -- occasionally letting a slightly-less-likely token through, which breaks loops:
 
 ```
-always pick best:  "Come, so the so the so the..." (loops forever)
-sample instead:     "Come, so he so, farewell, my lord."
+prompt: "What news from the north?"
+
+always pick best:  "And shall the stay, and the shall the strands the desh a
+                     shall the dester the dest a speed the shall the dought
+                     the sould the shall and and a a spon the the sould..."
+sample instead:     "What, epseles hear mears will thou comest allss his a
+                     heade man a man buttines with han in off astur?"
 ```
 
 ## What's next
