@@ -1,5 +1,12 @@
 import type { Metadata } from "next";
+import { Lora } from "next/font/google";
 import "./globals.css";
+
+const lora = Lora({
+  subsets: ["latin"],
+  variable: "--font-serif",
+  weight: ["500", "600", "700"],
+});
 
 export const metadata: Metadata = {
   title: "Neng Li",
@@ -11,17 +18,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" className={lora.variable}>
       <head>
         <link rel="icon" href="/favicon.ico" />
       </head>
-      <body className="bg-gray-100 text-gray-900">
-        <header className="border-b border-gray-200 bg-white">
+      <body className="bg-paper text-ink">
+        <header className="border-b border-line bg-paper">
           <nav className="mx-auto flex w-full max-w-4xl items-center justify-between px-6 py-4">
-            <a href="/" className="text-lg font-semibold">Neng Li</a>
+            <a href="/" className="font-serif text-lg font-semibold text-ink">Neng Li</a>
             <div className="flex items-center gap-6 text-sm font-medium">
-              <a href="/" className="text-gray-700 hover:text-gray-900">Home</a>
-              <a href="/writing" className="text-gray-700 hover:text-gray-900">Writing</a>
+              <a href="/" className="text-ink/70 hover:text-accent-600">Home</a>
+              <a href="/writing" className="text-ink/70 hover:text-accent-600">Writing</a>
             </div>
           </nav>
         </header>
