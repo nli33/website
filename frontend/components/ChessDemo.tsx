@@ -19,6 +19,7 @@ export default function ChessDemo() {
   const [thinking, setThinking] = useState(false);
   const [engineWorker, setEngineWorker] = useState<Worker | null>(null);
   const [lastMove, setLastMove] = useState<{ from: string; to: string } | null>(null);
+  const [thinkTimeMs, setThinkTimeMs] = useState(1000);
 
   // Load Silverfish
   useEffect(() => {
@@ -35,7 +36,7 @@ export default function ChessDemo() {
     else setStatus(g.turn() === "w" ? "Your turn (White)" : "Engine thinking...");
   }, []);
 
-  const makeEngineMove = useCallback((g: Chess, sf: Worker) => {
+  const makeEngineMove = useCallback((g: Chess, sf: Worker, movetime: number) => {
     setThinking(true);
     sf.onmessage = (e: MessageEvent) => {
       const line: string = e.data;
@@ -54,7 +55,7 @@ export default function ChessDemo() {
       }
     };
     sf.postMessage(`position fen ${g.fen()}`);
-    sf.postMessage("go movetime 500");
+    sf.postMessage(`go movetime ${movetime}`);
   }, [updateStatus]);
 
   const handleSquareClick = useCallback((square: string) => {
@@ -71,7 +72,7 @@ export default function ChessDemo() {
           setGame(newGame);
           updateStatus(newGame);
           if (!newGame.isGameOver() && engineWorker) {
-            setTimeout(() => makeEngineMove(newGame, engineWorker), 100);
+            setTimeout(() => makeEngineMove(newGame, engineWorker, thinkTimeMs), 100);
           }
           return;
         }
@@ -85,7 +86,7 @@ export default function ChessDemo() {
       setSelected(square);
       setLegalMoves(moves.map((m) => m.to));
     }
-  }, [game, selected, legalMoves, thinking, engineWorker, makeEngineMove, updateStatus]);
+  }, [game, selected, legalMoves, thinking, engineWorker, thinkTimeMs, makeEngineMove, updateStatus]);
 
   const resetGame = () => {
     const newGame = new Chess();
@@ -108,12 +109,28 @@ export default function ChessDemo() {
         <span className={`text-sm font-medium ${game.isGameOver() ? "text-red-600" : "text-gray-700"}`}>
           {status}
         </span>
-        <button
-          onClick={resetGame}
-          className="rounded border border-gray-300 px-3 py-1 text-sm text-gray-600 hover:border-gray-500 hover:text-gray-900"
-        >
-          New Game
-        </button>
+        <div className="flex items-center gap-3">
+          <label className="flex items-center gap-2 text-sm text-gray-600">
+            Engine thinks for
+            <select
+              value={thinkTimeMs}
+              onChange={(e) => setThinkTimeMs(Number(e.target.value))}
+              className="rounded border border-gray-300 px-2 py-1 text-sm text-gray-700"
+            >
+              <option value={200}>0.2s</option>
+              <option value={500}>0.5s</option>
+              <option value={1000}>1s</option>
+              <option value={2000}>2s</option>
+              <option value={5000}>5s</option>
+            </select>
+          </label>
+          <button
+            onClick={resetGame}
+            className="rounded border border-gray-300 px-3 py-1 text-sm text-gray-600 hover:border-gray-500 hover:text-gray-900"
+          >
+            New Game
+          </button>
+        </div>
       </div>
 
       <div className="inline-block rounded border border-gray-300 overflow-hidden">
@@ -135,11 +152,11 @@ export default function ChessDemo() {
                 <div
                   key={square}
                   onClick={() => handleSquareClick(square)}
-                  className={`relative flex h-10 w-10 cursor-pointer items-center justify-center text-2xl select-none sm:h-14 sm:w-14 ${bg}`}
+                  className={`relative flex h-14 w-14 cursor-pointer items-center justify-center text-4xl select-none sm:h-20 sm:w-20 sm:text-6xl ${bg}`}
                 >
                   {isLegal && (
                     <div className={`absolute inset-0 flex items-center justify-center`}>
-                      <div className={`rounded-full ${piece ? "h-full w-full border-4 border-black/20 opacity-40" : "h-3 w-3 bg-black/20 sm:h-4 sm:w-4"}`} />
+                      <div className={`rounded-full ${piece ? "h-full w-full border-4 border-black/20 opacity-40" : "h-4 w-4 bg-black/20 sm:h-5 sm:w-5"}`} />
                     </div>
                   )}
                   {piece && (
@@ -155,7 +172,7 @@ export default function ChessDemo() {
       </div>
 
       <div className="mt-2 flex gap-6 text-xs text-gray-400">
-        {FILES.map((f) => <span key={f} className="w-10 text-center sm:w-14">{f}</span>)}
+        {FILES.map((f) => <span key={f} className="w-14 text-center sm:w-20">{f}</span>)}
       </div>
     </div>
   );
