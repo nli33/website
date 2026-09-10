@@ -29,6 +29,7 @@ export default function RootLayout({
             <div className="flex items-center gap-6 text-sm font-medium">
               <a href="/" className="text-ink/70 hover:text-accent-600">Home</a>
               <a href="/writing" className="text-ink/70 hover:text-accent-600">Writing</a>
+              <a href="/photos" className="text-ink/70 hover:text-accent-600">Photos</a>
             </div>
           </nav>
         </header>
