@@ -1,8 +1,13 @@
 import { getAllPosts, getPostBySlug } from "@/lib/blog";
 import { notFound } from "next/navigation";
-import { remark } from "remark";
-import remarkHtml from "remark-html";
+import { unified } from "unified";
+import remarkParse from "remark-parse";
+import remarkMath from "remark-math";
+import remarkRehype from "remark-rehype";
+import rehypeKatex from "rehype-katex";
+import rehypeStringify from "rehype-stringify";
 import type { Metadata } from "next";
+import "katex/dist/katex.min.css";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -25,7 +30,13 @@ export default async function PostPage({ params }: Props) {
   const post = getPostBySlug(slug);
   if (!post) notFound();
 
-  const processed = await remark().use(remarkHtml).process(post.content);
+  const processed = await unified()
+    .use(remarkParse)
+    .use(remarkMath)
+    .use(remarkRehype)
+    .use(rehypeKatex)
+    .use(rehypeStringify)
+    .process(post.content);
   const contentHtml = processed.toString();
 
   return (
@@ -59,6 +70,7 @@ export default async function PostPage({ params }: Props) {
         .markdown th, .markdown td { border: 1px solid #d1d5db; padding: 0.6rem; text-align: left; }
         .markdown th { background: #f3f4f6; }
         .markdown img { margin: 1.5rem 0; max-width: 100%; height: auto; border-radius: 0.5rem; }
+        .markdown pre { overflow-x: auto; }
       `}</style>
     </main>
   );
