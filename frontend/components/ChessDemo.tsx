@@ -17,15 +17,14 @@ export default function ChessDemo() {
   const [legalMoves, setLegalMoves] = useState<string[]>([]);
   const [status, setStatus] = useState("Your turn (White)");
   const [thinking, setThinking] = useState(false);
-  const [stockfish, setStockfish] = useState<Worker | null>(null);
+  const [engineWorker, setEngineWorker] = useState<Worker | null>(null);
   const [lastMove, setLastMove] = useState<{ from: string; to: string } | null>(null);
 
-  // Load Stockfish
+  // Load Silverfish
   useEffect(() => {
-    const sf = new Worker("https://cdnjs.cloudflare.com/ajax/libs/stockfish.js/10.0.2/stockfish.js");
+    const sf = new Worker("/engine/worker.js");
     sf.postMessage("uci");
-    sf.postMessage("setoption name Skill Level value 5");
-    setStockfish(sf);
+    setEngineWorker(sf);
     return () => sf.terminate();
   }, []);
 
@@ -71,8 +70,8 @@ export default function ChessDemo() {
           setLegalMoves([]);
           setGame(newGame);
           updateStatus(newGame);
-          if (!newGame.isGameOver() && stockfish) {
-            setTimeout(() => makeEngineMove(newGame, stockfish), 100);
+          if (!newGame.isGameOver() && engineWorker) {
+            setTimeout(() => makeEngineMove(newGame, engineWorker), 100);
           }
           return;
         }
@@ -86,7 +85,7 @@ export default function ChessDemo() {
       setSelected(square);
       setLegalMoves(moves.map((m) => m.to));
     }
-  }, [game, selected, legalMoves, thinking, stockfish, makeEngineMove, updateStatus]);
+  }, [game, selected, legalMoves, thinking, engineWorker, makeEngineMove, updateStatus]);
 
   const resetGame = () => {
     const newGame = new Chess();
