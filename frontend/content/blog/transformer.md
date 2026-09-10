@@ -148,3 +148,4 @@ A few directions I'd like to try, beyond this "toy transformer", continuing on t
 - training something closer to GPT-2 quality, instead of a toy-scale model
 - actually scaling up training -- adding infrastructure considerations
 - reading the Kaplan et al. and Chinchilla scaling-laws papers, to understand systematically tradeoff between data, model size, and compute to make an LLM better
+- implementing more complex architecture like mixture-of-experts (MoE)
