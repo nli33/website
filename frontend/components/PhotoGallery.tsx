@@ -26,9 +26,9 @@ export default function PhotoGallery({ photos }: { photos: Photo[] }) {
 
   return (
     <div className="mx-auto w-full max-w-3xl select-none">
-      <div className="relative overflow-hidden">
+      <div className="relative h-[70vh] max-h-[600px] overflow-hidden">
         <div
-          className="flex transition-transform duration-500 ease-out"
+          className="flex h-full transition-transform duration-500 ease-out"
           style={{
             transform: `translateX(calc(${(100 - SLIDE_WIDTH) / 2}% - ${index * SLIDE_WIDTH}%))`,
           }}
@@ -36,14 +36,14 @@ export default function PhotoGallery({ photos }: { photos: Photo[] }) {
           {photos.map((photo, i) => (
             <div
               key={photo.src}
-              className="shrink-0 px-3"
+              className="flex h-full shrink-0 items-center justify-center px-3"
               style={{ width: `${SLIDE_WIDTH}%` }}
               onClick={() => i !== index && goTo(i)}
             >
               <img
                 src={photo.src}
                 alt={photo.alt}
-                className={`aspect-[4/3] w-full rounded-xl border border-line object-cover shadow-sm transition-all duration-500 ${
+                className={`max-h-full max-w-full rounded-xl border border-line object-contain shadow-sm transition-all duration-500 ${
                   i === index ? "opacity-100" : "cursor-pointer opacity-50 scale-95"
                 }`}
               />
