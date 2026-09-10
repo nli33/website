@@ -43,6 +43,7 @@ examples of some interesting things I learned during the process:
 - the cleverness of positional encoding:
 
     $PE_{(pos, 2i)} = \sin(pos / 10000^{2i/d_{model}})$
+    
     $PE_{(pos, 2i+1)} = \cos(pos / 10000^{2i/d_{model}})$
 
     not only because sinusoids are linear combinations of each other (as stated in the paper); but also, different frequencies can help capture position at different scales, and help encode position more uniquely.
