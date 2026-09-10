@@ -103,19 +103,19 @@ export default function ChessDemo() {
   return (
     <div className="mt-4">
       <h2 className="mb-3 text-xl font-semibold">Play vs Silverfish</h2>
-      <p className="mb-4 text-sm text-gray-500">You play as White. The engine plays as Black.</p>
+      <p className="mb-4 text-sm text-ink/60">You play as White. The engine plays as Black.</p>
 
       <div className="mb-3 flex items-center justify-between">
-        <span className={`text-sm font-medium ${game.isGameOver() ? "text-red-600" : "text-gray-700"}`}>
+        <span className={`text-sm font-medium ${game.isGameOver() ? "text-red-600" : "text-ink/70"}`}>
           {status}
         </span>
         <div className="flex items-center gap-3">
-          <label className="flex items-center gap-2 text-sm text-gray-600">
+          <label className="flex items-center gap-2 text-sm text-ink/60">
             Engine thinks for
             <select
               value={thinkTimeMs}
               onChange={(e) => setThinkTimeMs(Number(e.target.value))}
-              className="rounded border border-gray-300 px-2 py-1 text-sm text-gray-700"
+              className="rounded border border-line px-2 py-1 text-sm text-ink/80"
             >
               <option value={200}>0.2s</option>
               <option value={500}>0.5s</option>
@@ -126,14 +126,14 @@ export default function ChessDemo() {
           </label>
           <button
             onClick={resetGame}
-            className="rounded border border-gray-300 px-3 py-1 text-sm text-gray-600 hover:border-gray-500 hover:text-gray-900"
+            className="rounded border border-line px-3 py-1 text-sm text-ink/60 hover:border-accent-400 hover:text-ink"
           >
             New Game
           </button>
         </div>
       </div>
 
-      <div className="inline-block rounded border border-gray-300 overflow-hidden">
+      <div className="inline-block rounded border border-line overflow-hidden">
         {RANKS.map((rank, ri) => (
           <div key={rank} className="flex">
             {FILES.map((file, fi) => {
@@ -171,7 +171,7 @@ export default function ChessDemo() {
         ))}
       </div>
 
-      <div className="mt-2 flex gap-6 text-xs text-gray-400">
+      <div className="mt-2 flex gap-6 text-xs text-ink/40">
         {FILES.map((f) => <span key={f} className="w-14 text-center sm:w-20">{f}</span>)}
       </div>
     </div>
