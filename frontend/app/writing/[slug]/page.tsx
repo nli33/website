@@ -5,9 +5,32 @@ import remarkParse from "remark-parse";
 import remarkMath from "remark-math";
 import remarkRehype from "remark-rehype";
 import rehypeKatex from "rehype-katex";
+import rehypeSlug from "rehype-slug";
 import rehypeStringify from "rehype-stringify";
+import { visit } from "unist-util-visit";
+import { toString as hastToString } from "hast-util-to-string";
+import type { Root, Element } from "hast";
 import type { Metadata } from "next";
 import "katex/dist/katex.min.css";
+
+interface Heading {
+  id: string;
+  text: string;
+  depth: number;
+}
+
+function collectHeadings(headings: Heading[]) {
+  return (tree: Root) => {
+    visit(tree, "element", (node: Element) => {
+      if (node.tagName === "h2" || node.tagName === "h3") {
+        const id = node.properties?.id;
+        if (typeof id === "string") {
+          headings.push({ id, text: hastToString(node), depth: Number(node.tagName[1]) });
+        }
+      }
+    });
+  };
+}
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -30,11 +53,14 @@ export default async function PostPage({ params }: Props) {
   const post = getPostBySlug(slug);
   if (!post) notFound();
 
+  const headings: Heading[] = [];
   const processed = await unified()
     .use(remarkParse)
     .use(remarkMath)
     .use(remarkRehype)
     .use(rehypeKatex)
+    .use(rehypeSlug)
+    .use(() => collectHeadings(headings))
     .use(rehypeStringify)
     .process(post.content);
   const contentHtml = processed.toString();
@@ -44,8 +70,8 @@ export default async function PostPage({ params }: Props) {
       <a href="/writing" className="text-sm text-accent-600 hover:text-accent-700 hover:underline">
         ← Back to Writing
       </a>
-      <article className="markdown mt-6 rounded-lg border border-line bg-white/60 p-8 shadow-sm">
-        <h1 className="m-0 mb-2 font-serif text-4xl font-semibold leading-tight text-ink">{post.title}</h1>
+      <article className="mt-6 rounded-lg border border-line bg-white/60 p-8 shadow-sm">
+        <h1 className="m-0 mb-2 font-serif text-4xl font-semibold leading-tight text-accent-700">{post.title}</h1>
         <p className="text-sm text-ink/50">
           {post.date.toLocaleDateString("en-US", {
             year: "numeric",
@@ -54,13 +80,29 @@ export default async function PostPage({ params }: Props) {
             timeZone: "UTC",
           })}
         </p>
-        <div dangerouslySetInnerHTML={{ __html: contentHtml }} />
+        {headings.length > 0 && (
+          <nav className="toc mt-6 rounded-lg border border-line bg-paper/60 px-6 py-5 text-base">
+            <p className="mb-3 text-lg font-semibold text-ink">Contents</p>
+            <ul>
+              {headings.map((h) => (
+                <li key={h.id} className={h.depth === 3 ? "ml-6" : undefined}>
+                  <a href={`#${h.id}`} className="text-ink/70 hover:text-accent-600">
+                    {h.text}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        )}
+        <div className="markdown" dangerouslySetInnerHTML={{ __html: contentHtml }} />
       </article>
       <style>{`
         .markdown { color: #2b2420; }
-        .markdown h1 { margin: 0 0 0.5rem 0; font-size: 2rem; font-weight: 600; line-height: 1.2; font-family: var(--font-serif), Georgia, serif; }
-        .markdown h2 { margin: 2rem 0 0.75rem 0; font-size: 1.5rem; font-weight: 600; font-family: var(--font-serif), Georgia, serif; }
-        .markdown h3 { margin: 1.5rem 0 0.5rem 0; font-size: 1.2rem; font-weight: 600; font-family: var(--font-serif), Georgia, serif; }
+        .markdown h1 { margin: 0 0 0.5rem 0; font-size: 2rem; font-weight: 600; line-height: 1.2; font-family: var(--font-serif), Georgia, serif; color: #7c3419; }
+        .markdown h2 { margin: 2rem 0 0.75rem 0; font-size: 1.5rem; font-weight: 600; font-family: var(--font-serif), Georgia, serif; scroll-margin-top: 1.5rem; color: #7c3419; }
+        .markdown h3 { margin: 1.5rem 0 0.5rem 0; font-size: 1.2rem; font-weight: 600; font-family: var(--font-serif), Georgia, serif; scroll-margin-top: 1.5rem; color: #7c3419; }
+        .toc ul { margin: 0; padding: 0; list-style: none; }
+        .toc li { margin-top: 0.45rem; margin-bottom: 0.45rem; }
         .markdown p { margin: 1rem 0; line-height: 1.75; }
         .markdown ul, .markdown ol { margin: 1rem 0 1rem 1.5rem; }
         .markdown ul { list-style: disc; }

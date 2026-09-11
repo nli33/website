@@ -22,6 +22,7 @@ export default {
       },
       fontFamily: {
         serif: ["var(--font-serif)", "Georgia", "ui-serif", "serif"],
+        sans: ["var(--font-sans)", "ui-sans-serif", "system-ui", "sans-serif"],
       },
     },
   },

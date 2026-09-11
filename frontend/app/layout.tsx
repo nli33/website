@@ -1,11 +1,17 @@
 import type { Metadata } from "next";
-import { Lora } from "next/font/google";
+import { Lora, Source_Sans_3 } from "next/font/google";
 import "./globals.css";
 
 const lora = Lora({
   subsets: ["latin"],
   variable: "--font-serif",
   weight: ["500", "600", "700"],
+});
+
+const sourceSans = Source_Sans_3({
+  subsets: ["latin"],
+  variable: "--font-sans",
+  weight: ["400", "500", "600"],
 });
 
 export const metadata: Metadata = {
@@ -18,7 +24,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={lora.variable}>
+    <html lang="en" className={`${lora.variable} ${sourceSans.variable}`}>
       <head>
         <link rel="icon" href="/favicon.ico" />
       </head>
