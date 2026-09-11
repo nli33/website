@@ -7,7 +7,7 @@ export default function Home() {
           Hi! I&apos;m Neng. I&apos;m a 2A Software Engineering student @ University of Waterloo.
         </p>
         <p className="text-xl text-ink/80">
-          I&apos;m passionate about systems programming &amp; ML, and I'm currently seeking Winter 2027 opportunities.
+          I like systems programming &amp; ML, and I'm currently seeking Winter 2027 opportunities.
         </p>
       </section>
 

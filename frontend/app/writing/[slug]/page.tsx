@@ -1,4 +1,5 @@
 import { getAllPosts, getPostBySlug } from "@/lib/blog";
+import MarkdownContent from "@/components/MarkdownContent";
 import { notFound } from "next/navigation";
 import { unified } from "unified";
 import remarkParse from "remark-parse";
@@ -66,11 +67,11 @@ export default async function PostPage({ params }: Props) {
   const contentHtml = processed.toString();
 
   return (
-    <main className="mx-auto w-full max-w-4xl px-6 py-12">
+    <main className="mx-auto w-full max-w-4xl bg-white px-4 py-8 sm:bg-transparent sm:px-6 sm:py-12">
       <a href="/writing" className="text-sm text-accent-600 hover:text-accent-700 hover:underline">
         ← Back to Writing
       </a>
-      <article className="mt-6 rounded-lg border border-line bg-white/60 p-8 shadow-sm">
+      <article className="mt-4 sm:mt-6 sm:rounded-lg sm:border sm:border-line sm:bg-white/60 sm:p-8 sm:shadow-sm">
         <h1 className="m-0 mb-2 font-serif text-4xl font-semibold leading-tight text-accent-700">{post.title}</h1>
         <p className="text-sm text-ink/50">
           {post.date.toLocaleDateString("en-US", {
@@ -94,7 +95,7 @@ export default async function PostPage({ params }: Props) {
             </ul>
           </nav>
         )}
-        <div className="markdown" dangerouslySetInnerHTML={{ __html: contentHtml }} />
+        <MarkdownContent html={contentHtml} />
       </article>
       <style>{`
         .markdown { color: #2b2420; }
@@ -112,7 +113,7 @@ export default async function PostPage({ params }: Props) {
         .markdown table { width: 100%; margin: 1.5rem 0; border-collapse: collapse; }
         .markdown th, .markdown td { border: 1px solid #e7dbc9; padding: 0.6rem; text-align: left; }
         .markdown th { background: #f7ece1; }
-        .markdown img { margin: 1.5rem 0; max-width: 100%; height: auto; border-radius: 0.5rem; }
+        .markdown img { margin: 1.5rem 0; max-width: 100%; height: auto; border-radius: 0.5rem; cursor: zoom-in; }
         .markdown pre { overflow-x: auto; background: #f3ece0; padding: 1rem; border-radius: 0.5rem; }
         .markdown code { font-size: 0.9em; }
       `}</style>

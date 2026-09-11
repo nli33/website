@@ -7,6 +7,7 @@ const SLIDE_WIDTH = 70; // percent of the container each slide occupies
 
 export default function PhotoGallery({ photos }: { photos: Photo[] }) {
   const [index, setIndex] = useState(0);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
 
   const goTo = useCallback(
     (i: number) => setIndex(((i % photos.length) + photos.length) % photos.length),
@@ -17,12 +18,16 @@ export default function PhotoGallery({ photos }: { photos: Photo[] }) {
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
+      if (lightboxOpen) {
+        if (e.key === "Escape") setLightboxOpen(false);
+        return;
+      }
       if (e.key === "ArrowLeft") prev();
       if (e.key === "ArrowRight") next();
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [prev, next]);
+  }, [prev, next, lightboxOpen]);
 
   return (
     <div className="mx-auto w-full max-w-3xl select-none">
@@ -38,14 +43,14 @@ export default function PhotoGallery({ photos }: { photos: Photo[] }) {
               key={photo.src}
               className="flex h-full shrink-0 items-center justify-center px-3"
               style={{ width: `${SLIDE_WIDTH}%` }}
-              onClick={() => i !== index && goTo(i)}
+              onClick={() => (i === index ? setLightboxOpen(true) : goTo(i))}
             >
               <img
                 src={photo.src}
                 alt={photo.alt}
                 loading="lazy"
                 className={`max-h-full max-w-full rounded-xl border border-line object-contain shadow-sm transition-all duration-500 ${
-                  i === index ? "opacity-100" : "cursor-pointer opacity-50 scale-95"
+                  i === index ? "cursor-zoom-in opacity-100" : "cursor-pointer opacity-50 scale-95"
                 }`}
               />
             </div>
@@ -84,6 +89,26 @@ export default function PhotoGallery({ photos }: { photos: Photo[] }) {
           />
         ))}
       </div>
+
+      {lightboxOpen && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-4"
+          onClick={() => setLightboxOpen(false)}
+        >
+          <img
+            src={photos[index].src}
+            alt={photos[index].alt}
+            className="max-h-full max-w-full rounded-lg object-contain"
+          />
+          <button
+            onClick={() => setLightboxOpen(false)}
+            aria-label="Close"
+            className="absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-full bg-white/90 text-2xl leading-none text-ink shadow-sm"
+          >
+            ×
+          </button>
+        </div>
+      )}
     </div>
   );
 }
