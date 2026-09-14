@@ -5,7 +5,7 @@ date: 2026-09-06
 slug: "transformer"
 ---
 
-## The Rules
+# The Rules
 
 Some people really love building projects with nothing but the most basic tools: building a neural network in C, writing `malloc` from scratch, etc. I do like this spirit: it gives you the strongest understanding of how something works under the hood, and improves raw implementation ability. However, doing some things are truly low ROI.
 
@@ -20,7 +20,7 @@ So, I outlined a few rules for this project:
 - I can use Claude to explain and clarify concepts in the paper, but I have to write the transformer's forward pass myself, and without pytorch (ex. [torch.nn.MultiheadAttention](https://docs.pytorch.org/docs/2.14/generated/torch.nn.MultiheadAttention.html))
 - Claude can handle general boilerplate, like `argparse`
 
-## Reading the Paper
+# Reading the Paper
 
 This turned out to be both easier and harder than expected.
 
@@ -32,7 +32,7 @@ The hard part: the paper is sometimes imprecise and hand-waves over some implied
 - the purpose of LayerNorm (*stability; keeps mean 0 and variance 1*)
 - the purpose of residual connections (*lets each layer learn a "refinement" - what to adjust relative to input; helps preserve information from earlier layers*)
 
-## Implementation
+# Implementation
 
 I implemented required layer classes one by one -- `FeedForward`, `Attention`, `MultiHeadAttention`... eventually up to `Decoder`, `Encoder`, `Transformer`. 
 
@@ -48,11 +48,11 @@ examples of some interesting things I learned during the process:
 
     the paper's own justification is that this lets the model learn to attend by relative position: for any fixed offset `k`, `PE(pos+k)` can be written as a linear function of `PE(pos)`. on top of that, using many different frequencies lets the encoding capture position at multiple scales at once instead of just one.
 
-## Training and eval
+# Training and eval
 
 I trained this toy transformer on 3 tasks of increasing difficulty. 
 
-### 1. reversing a sequence of fixed length
+## 1. reversing a sequence of fixed length
 
 for example: passing a sequence of tokens like `[1, 4, 6, 2, 3, 5, 8, 7]` into the encoder, feeding that and `[<sos>]` into the decoder, and expecting the decoder to autoregressively generate `[7, 8, 5, 3, 2, 6, 4, 1, <eos>]`. 
 
@@ -72,7 +72,7 @@ output: tensor([7, 8, 5, 3, 2, 6, 4, 1])
 
 since I only included sequences of a fixed length (8) in the training data, for sequences of other lengths the model would output garbage. which shows that the model never learned a generalized meaning of what it means to "reverse" a sequence.
 
-### 2. sorting a sequence of *arbitrary* length
+## 2. sorting a sequence of *arbitrary* length
 
 This one turned out to be much more difficult than the previous one.
 
@@ -99,7 +99,7 @@ I later tried to also make batching speed up training (vectorizing it so a batch
 
 With these changes, the model improved a lot on the sorting task, though the limitations from its small size remained. 
 
-### 3. shakespeare "chatbot"
+## 3. shakespeare "chatbot"
 
 For the previous two examples, we had an objective measure of correctness. For real-world LLM pretraining, the task is often much evaluated much more subjectively (ex: code quality). 
 
@@ -125,7 +125,7 @@ In other words: for this project, throwing more/better data at the model, withou
 
 Beyond this project, this probably means that pretraining data is at least as important (if not more important) than model architecture, but that might be something i need to empirically verify on my own.
 
-### one last slight wrinkle: temperature
+## one last slight wrinkle: temperature
 
 A small problem once I started generating longer completions: the model kept getting stuck repeating itself: with phrases like "the so the so the so...". 
 
@@ -141,7 +141,7 @@ sample instead:     "What, epseles hear mears will thou comest allss his a
                      heade man a man buttines with han in off astur?"
 ```
 
-## What's next
+# What's next
 
 A few directions I'd like to try, beyond this "toy transformer", continuing on the llm roadmap:
 

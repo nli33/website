@@ -9,7 +9,7 @@ slug: "chess-engine"
 
 I won't go through the whole development story since it's pretty long, but here are some of my reflections.
 
-## debugging
+# debugging
 
 DAMN, debugging a chess engine is hard. 
 
@@ -25,7 +25,7 @@ Or, I could put my face up to the screen and scrutinize the search code line by 
 
 If you're wondering why I didn't "just ask AI to fix it", at this time I didn't have a claude code subscription or whatever, & was coding everything myself. Even when I tried pasting a function or a file into an LLM, I'd get garbage suggestions back. 
 
-## testing
+# testing
 
 **about a quarter (~2200 lines) of the whole codebase was comprised of tests.** at some point, it was probably close to half.
 
@@ -35,7 +35,7 @@ Especially early on in development (position representation & move-gen), I often
 
 As mentioned earlier, search is quite difficult to test in an informative way, so I could only test search at a very high level (ex: whether the agent can find a mate-in-2 tactic). A lot of the time, the only thing this could signal is "SOMETHING IS WRONG". 
 
-### strength testing
+## strength testing
 
 one *easy* part about developing a chess engine is that the goal being worked towards is incredibly objective. 
 
@@ -51,7 +51,7 @@ Anyways enough yapping: strength testing is done via a statistical test called S
 
 For me, the test's conclusion usually requires ~thousands of games. For a stronger engine, often hundreds of thousands of games. As chess engine development gets further, often small amounts of strength improvement are being squeezed out, so the difference between two versions of an engine will be very small.
 
-### elo testing
+## elo testing
 
 The first thing people want to know about you as a chess player is your ELO. However, ELO is a number that is only meaningful against a pool of other players.
 
@@ -65,7 +65,7 @@ At its peak, my engine reached ~2400 CCRL-calibrated rating. This is approximate
 
 Future improvements might involve a better NNUE architecture, more aggressive search tree pruning, more self-play training, or even leveraging SIMD to accelerate raw search speed. However, I feel the project has mostly run its course; as it stands it has already been very rewarding.
 
-## ai coding
+# ai coding
 
 Until March 2026 I worked on this project solely by hand, with a friend (he handled the UCI protocol, I handled core engine functionality)
 
@@ -77,7 +77,7 @@ and it very much did! Many chess engine techniques have been known for decades, 
 
 It was pretty mindblowing to see it improve the engine by a decent margin time after time, especially because, when I took a step back from "coding by hand", I had been struggling with some subtle bugs which were tricky to fix, because my attempted fixes would often result in a performance regression elsewhere.
 
-## Conclusions
+# Conclusions
 
 - This project was an extreme exercise in debugging
 - I did learn a lot:

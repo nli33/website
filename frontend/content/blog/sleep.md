@@ -9,7 +9,7 @@ What I learned about sleep so far during university (a lot of it from... *experi
 
 When I was in high school I essentially always slept at 10 pm, but my sleep schedule has become a lot more *interesting* in university.
 
-## Sunlight
+# Sunlight
 
 Getting sunlight after waking up: probably the single most overpowered way to regulate your sleep schedule. 
 
@@ -17,11 +17,11 @@ If you always get sunlight immediately after waking up (can be as simple as open
 
 Scientific background: your body's [circadian rhythm](https://en.wikipedia.org/wiki/Circadian_rhythm) is primarily "synchronized" by morning light exposure.
 
-## Device Before Bed
+# Device Before Bed
 
 Using a device before bed won't always give you a hard time falling asleep (especially if you are slightly sleep deprived), but it will pretty much always cause you to be more tired the next day.
 
-## I Can't Fall Asleep
+# I Can't Fall Asleep
 
 If you are trying to fall asleep but can't:
 
@@ -39,7 +39,7 @@ If you are trying to fall asleep but can't:
 
 - Another common advice: get up in the dark, do some slight physical activity (stretching, going to the bathroom, etc), and lie back down after a while
 
-## 90-minute cycles
+# 90-minute cycles
 
 This one is more from research. Basically, sleep cycles (Light -> Deep -> REM) last about 90 minutes and repeat throughout the night.
 

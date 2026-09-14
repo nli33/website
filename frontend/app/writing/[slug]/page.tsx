@@ -23,7 +23,7 @@ interface Heading {
 function collectHeadings(headings: Heading[]) {
   return (tree: Root) => {
     visit(tree, "element", (node: Element) => {
-      if (node.tagName === "h2" || node.tagName === "h3") {
+      if (node.tagName === "h1" || node.tagName === "h2" || node.tagName === "h3") {
         const id = node.properties?.id;
         if (typeof id === "string") {
           headings.push({ id, text: hastToString(node), depth: Number(node.tagName[1]) });
@@ -86,7 +86,7 @@ export default async function PostPage({ params }: Props) {
             <p className="mb-3 text-lg font-semibold text-ink">Contents</p>
             <ul>
               {headings.map((h) => (
-                <li key={h.id} className={h.depth === 3 ? "ml-6" : undefined}>
+                <li key={h.id} className={h.depth === 3 ? "ml-12" : h.depth === 2 ? "ml-6" : undefined}>
                   <a href={`#${h.id}`} className="text-ink/70 hover:text-accent-600">
                     {h.text}
                   </a>
