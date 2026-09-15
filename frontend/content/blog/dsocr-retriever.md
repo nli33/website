@@ -3,6 +3,7 @@ title: "Building a decent visual document retriever"
 description: "architecture explanation + development process"
 date: 2026-09-13
 slug: "dsocr-retriever"
+thumbnail: "/blog/dsocr-retriever/gundam.png"
 ---
 
 This is going to be a somewhat terse/long post describing the *end-to-end* architecture of a [visual document retriever](https://huggingface.co/docs/transformers/en/tasks/visual_document_retrieval), which I adapted myself based on [DeepSeek-OCR](https://github.com/deepseek-ai/DeepSeek-OCR). 

@@ -17,21 +17,32 @@ export default function WritingPage() {
         <ul className="space-y-6">
           {posts.map((post) => (
             <li key={post.slug} className="rounded-lg border border-line bg-white/60 p-5 shadow-sm">
-              <a
-                href={`/writing/${post.slug}`}
-                className="font-serif text-2xl font-semibold text-ink hover:text-accent-600"
-              >
-                {post.title}
-              </a>
-              <p className="mt-2 text-ink/70">{post.description}</p>
-              <p className="mt-3 text-sm text-ink/50">
-                {post.date.toLocaleDateString("en-US", {
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric",
-                  timeZone: "UTC",
-                })}
-              </p>
+              <div className="flex gap-4">
+                {post.thumbnail && (
+                  <img
+                    src={post.thumbnail}
+                    alt={post.title}
+                    className="h-16 w-16 shrink-0 rounded-md border border-line object-cover sm:h-24 sm:w-24"
+                  />
+                )}
+                <div className="min-w-0 flex-1">
+                  <a
+                    href={`/writing/${post.slug}`}
+                    className="font-serif text-2xl font-semibold text-ink hover:text-accent-600"
+                  >
+                    {post.title}
+                  </a>
+                  <p className="mt-2 text-ink/70">{post.description}</p>
+                  <p className="mt-3 text-sm text-ink/50">
+                    {post.date.toLocaleDateString("en-US", {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                      timeZone: "UTC",
+                    })}
+                  </p>
+                </div>
+              </div>
             </li>
           ))}
         </ul>

@@ -3,6 +3,7 @@ title: "Building a chess engine"
 description: "a reflection on debugging, testing, and ai coding"
 date: 2026-09-10
 slug: "chess-engine"
+thumbnail: "blog/engine/magnus.png"
 ---
 
 [Silverfish](https://github.com/nli33/silverfish) is a chess engine I wrote in Golang. Despite the seemingly simple premise of a chess engine -- finding the best move in a position -- this might be my biggest project in terms of engineering time and pure "lines of code written".

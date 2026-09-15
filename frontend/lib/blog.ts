@@ -9,6 +9,7 @@ export interface PostMeta {
   description: string;
   date: Date;
   slug: string;
+  thumbnail?: string;
 }
 
 export interface Post extends PostMeta {
@@ -26,6 +27,7 @@ export function getAllPosts(): PostMeta[] {
         description: data.description as string,
         date: new Date(data.date),
         slug: (data.slug as string) || file.replace(/\.md$/, ""),
+        thumbnail: data.thumbnail as string | undefined,
       };
     })
     .sort((a, b) => b.date.getTime() - a.date.getTime());
