@@ -79,7 +79,7 @@ The [batch, 3, H, W] tensor (batch=N tiles for gundam and batch=1 otherwise) is 
 Recall that we are using the `base` setting as an example, so our original image is 1024x1024. 
 
 1. each H x W image is carved into a [h, w] grid of 16x16-size cells. In our example, h=w=64 since 1024 / 16px = 64 cells.
-2. each 16x16 px cell is reshaped into a 768-dim vector (16 x 16 x 3 color channels), and multiplied by a learned matrix for a new dim-768 vector (\*\*\*\* purpose?). 
+2. each 16x16 px cell is reshaped into a 768-dim vector (16 x 16 x 3 color channels), and multiplied by a learned matrix for a new dim-768 vector. This is to convert "raw pixel values" into a semantically meaningful embedding space. 
     - Note that each vector contains **local visual detail** corresponding to the 16x16 region of the original tile, which plays into the whole purpose of SAM.
 3. the set of vectors goes through several transformer blocks.
     - **windowed** self-attention is applied. In terms of the original image's geometry as a [64, 64] grid of cells: each cell attends to other cells in a [14, 14] window in the grid.
@@ -251,7 +251,7 @@ As we've been covering, the queries go into the query tower, pages go through wh
 
 ## 3.3 GradCache
 
-Generally, more negatives during contrastive training are better (while considering negatives' quality/hardness). However, more negatives = more images that need to run through the page tower, which is expensive. Every intermediate value during forward has to stay in memory for backprop. 
+Generally, more negatives during contrastive training are better (while also considering negatives' quality/hardness). However, more negatives = more images that need to run through the page tower, which is expensive. Every intermediate value during forward has to stay in memory for backprop. 
 
 GradCache avoids this *somehow*, and I haven't gone through the specifics of how GradCache works -- would probably be an interesting read for another time -- but the effect is that after using GradCache, we use 2x the page-encoding compute, but encoding becomes **independent** of GPU memory.
 
@@ -278,7 +278,7 @@ nDCG@k:
 
 # 5. Experiment history
 
-Here are the most of the experiments that I had to run during the development process. These took on the order of hours-days on a good GPU. 
+Here are the most of the experiments that I had to run during the development process. Each of these took on the order of hours to days on a good GPU. 
 
 ## 5.1 Design A
 
@@ -375,25 +375,27 @@ The motivation behind this was to try a multi-vector variant; the ViDoRe leaderb
 
 # 6. Conclusion + next steps
 
-The 0.759 number on ViDoRe v1 is a decently strong number, but in general the ViDoRe leaderboards are dominated by multi-vector retrieval models: using multiple vectors per document instead of only one. Multi-vector models have higher retrieval quality at the expense of compute, while single-vector models encode less detail in their sole page vector, but have less overhead.
+The 0.759 nDCG on ViDoRe v1 is a decently strong number, but in general the ViDoRe leaderboards are dominated by multi-vector retrieval models: using multiple vectors per document instead of only one. Multi-vector models have higher retrieval quality at the expense of compute, while single-vector models encode less detail in their sole page vector, but have less overhead. My result was a strong number compared to other single-vector models.
 
-One future direction is to formulate a "middle-ground" architecture between multi-vector and single-vector, combining some of the fine-grained detail of multi-vector with the higher computational/storage efficiency of single-vector. A very similar work is [Multi-Prefix Embedding](https://arxiv.org/pdf/2606.23642), but this was originally for text documents and needs to be adapted for visual documents.
+One future direction is to formulate a "middle-ground" architecture between multi-vector and single-vector, combining some of the fine-grained detail of multi-vector with the higher computational/storage efficiency of single-vector. A possibly analogous work is [Multi-Prefix Embedding](https://arxiv.org/pdf/2606.23642), but this was originally for text documents and needs to be adapted for visual documents.
 
-# 7. Meta-comment
+# 7. Why?
 
 **"Why did you write such a long post."**
 
-DeepSeek-OCR is a decently complex model. Writing this post helped me: 
+DeepSeek-OCR is a decently complex model. And my experiments were interesting & helped me empirically learn what worked and what didn't for improving a model's quality. Writing this post helped me: 
 1. document my development/experiment process somewhere
 2. practice understanding a complex model architecture end-to-end
 3. learn or review interesting concepts along the way: LoRA, GradCache, convolutions
 
 # 8. Relevant materials
 
-[Document Screenshot Embedding](https://arxiv.org/abs/2406.11251) (DSE) - Ma et al., 2024
+[Document Screenshot Embedding](https://arxiv.org/abs/2406.11251) (DSE) - **Ma et al., 2024**
 
-[ColPali](https://arxiv.org/abs/2407.01449) - Faysse et al., 2024
+[ColPali](https://arxiv.org/abs/2407.01449) - **Faysse et al., 2024**
 
-These were published basically at the same time in 2024, and were basically co-founding-papers (?) of visual document retrieval.
+[DeepSeek-OCR](https://arxiv.org/abs/2510.18234) - **Wei et al., 2026**
+
+DSE and Colpali were published at roughly the same time in 2024, and were the co-founding-papers (?) of visual document retrieval.
 
 I had the privilege of working with Dr. Ma on my research co-op -- actually, he put me on to this whole DeepSeek-OCR thing \:^)
