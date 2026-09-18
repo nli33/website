@@ -1,4 +1,4 @@
-import { getAllPosts } from "@/lib/blog";
+import { getAllPosts, formatShortDate } from "@/lib/blog";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -35,12 +35,9 @@ export default function WritingPage() {
                   </h2>
                   <p className="mt-2 text-ink/70">{post.description}</p>
                   <p className="mt-3 text-sm text-ink/50">
-                    {post.date.toLocaleDateString("en-US", {
-                      year: "numeric",
-                      month: "long",
-                      day: "numeric",
-                      timeZone: "UTC",
-                    })}
+                    {formatShortDate(post.date)}
+                    <span className="mx-2">·</span>
+                    {post.readingMinutes} min read
                   </p>
                 </div>
               </div>

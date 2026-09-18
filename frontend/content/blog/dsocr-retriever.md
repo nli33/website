@@ -383,7 +383,7 @@ One future direction is to formulate a "middle-ground" architecture between mult
 
 **"Why did you write such a long post."**
 
-DeepSeek-OCR is a decently complex model. And my experiments were interesting & helped me empirically learn what worked and what didn't for improving a model's quality. Writing this post helped me: 
+DeepSeek-OCR is a decently complex model. My experiments helped me learn empirically learn **what works and what doesn't for improving a model's quality**. Writing this post helped me: 
 1. document my development/experiment process somewhere
 2. practice understanding a complex model architecture end-to-end
 3. learn or review interesting concepts along the way: LoRA, GradCache, convolutions

@@ -1,4 +1,4 @@
-import { getAllPosts } from "@/lib/blog";
+import { getAllPosts, formatShortDate } from "@/lib/blog";
 import ObfuscatedEmail from "@/components/ObfuscatedEmail";
 
 export default function Home() {
@@ -32,12 +32,9 @@ export default function Home() {
                 <a href={`/writing/${post.slug}`} className="block">
                   <p className="font-serif text-lg font-semibold text-ink hover:text-accent-600">{post.title}</p>
                   <p className="mt-1 text-sm text-ink/50">
-                    {post.date.toLocaleDateString("en-US", {
-                      year: "numeric",
-                      month: "long",
-                      day: "numeric",
-                      timeZone: "UTC",
-                    })}
+                    {formatShortDate(post.date)}
+                    <span className="mx-2">·</span>
+                    {post.readingMinutes} min read
                   </p>
                 </a>
               </li>

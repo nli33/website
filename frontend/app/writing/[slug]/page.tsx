@@ -115,7 +115,7 @@ export default async function PostPage({ params }: Props) {
         .markdown th { background: #f7ece1; }
         .markdown img { margin: 1.5rem 0; max-width: 100%; height: auto; border-radius: 0.5rem; cursor: zoom-in; }
         .markdown pre { overflow-x: auto; background: #f3ece0; padding: 1rem; border-radius: 0.5rem; }
-        .markdown code { font-size: 0.9em; background: #f0dcc7; color: #7c3419; padding: 0.15em 0.4em; border-radius: 0.3em; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+        .markdown code { font-size: 0.9em; background: #f0dcc7; color: inherit; padding: 0.15em 0.4em; border-radius: 0.3em; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
         .markdown pre code { background: none; color: inherit; padding: 0; border-radius: 0; }
       `}</style>
     </main>
