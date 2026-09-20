@@ -1,5 +1,5 @@
 ---
-title: "Building a decent visual document retriever"
+title: "Training a decent visual document retriever"
 description: "architecture explanation + development process"
 date: 2026-09-13
 slug: "dsocr-retriever"
