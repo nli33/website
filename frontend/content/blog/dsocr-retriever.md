@@ -398,4 +398,4 @@ DeepSeek-OCR is a decently complex model. My experiments helped me learn empiric
 
 DSE and Colpali were published at roughly the same time in 2024, and were the co-founding-papers (?) of visual document retrieval.
 
-I had the privilege of working with Dr. Ma on my research co-op -- actually, he put me on to this whole DeepSeek-OCR thing \:^)
+I had the privilege of working with Dr. Ma on my research co-op -- actually, he introduced me to this DeepSeek-OCR thing \:^)
