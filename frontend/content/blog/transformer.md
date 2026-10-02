@@ -1,6 +1,6 @@
 ---
 title: "Building a transformer, not quite from scratch"
-description: "spoiler alert: used pytorch, numpy, and claude"
+description: "spoiler: used pytorch, numpy, and claude"
 date: 2026-09-06
 slug: "transformer"
 thumbnail: "blog/transformer/shkspr.png"
