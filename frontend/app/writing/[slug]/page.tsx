@@ -82,8 +82,8 @@ export default async function PostPage({ params }: Props) {
           })}
         </p>
         {headings.length > 0 && (
-          <nav className="toc mt-6 rounded-lg border border-line bg-paper/60 px-6 py-5 text-base">
-            <p className="mb-3 text-lg font-semibold text-ink">Contents</p>
+          <nav className="toc mt-6 border-y border-line py-4 text-base">
+            <p className="mb-2 font-serif text-lg font-semibold text-accent-700">Contents</p>
             <ul>
               {headings.map((h) => (
                 <li key={h.id} className={h.depth === 3 ? "ml-12" : h.depth === 2 ? "ml-6" : undefined}>
@@ -103,7 +103,7 @@ export default async function PostPage({ params }: Props) {
         .markdown h2 { margin: 2rem 0 0.75rem 0; font-size: 1.5rem; font-weight: 600; font-family: var(--font-serif), Georgia, serif; scroll-margin-top: 1.5rem; color: #7c3419; }
         .markdown h3 { margin: 1.5rem 0 0.5rem 0; font-size: 1.2rem; font-weight: 600; font-family: var(--font-serif), Georgia, serif; scroll-margin-top: 1.5rem; color: #7c3419; }
         .toc ul { margin: 0; padding: 0; list-style: none; }
-        .toc li { margin-top: 0.45rem; margin-bottom: 0.45rem; }
+        .toc li { margin-top: 0.3rem; margin-bottom: 0.3rem; }
         .markdown p { margin: 1rem 0; line-height: 1.75; }
         .markdown ul, .markdown ol { margin: 1rem 0 1rem 1.5rem; }
         .markdown ul { list-style: disc; }

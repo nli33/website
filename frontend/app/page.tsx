@@ -18,14 +18,33 @@ export default function Home() {
 
       <hr className="my-8 border-line" />
 
+      <section className="links mb-6">
+        <ul className="space-y-2 text-xl">
+          {[
+            ["/photos", "Cool photos I took"],
+            ["/media", "Favourite media"],
+          ].map(([href, label]) => (
+            <li key={href}>
+              <a href={href} className="font-serif font-semibold text-accent-600 hover:text-accent-700 hover:underline">
+                {label}
+                <span className="ml-2">&gt;&gt;</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <hr className="my-8 border-line" />
+
       {recentPosts.length > 0 && (
         <section className="recent-writing mb-6">
-          <div className="mb-3 flex items-baseline justify-between">
-            <h2 className="font-serif text-2xl font-semibold text-ink">Recent Writing</h2>
-            <a href="/writing" className="text-sm text-accent-600 hover:text-accent-700 hover:underline">
-              View all articles →
-            </a>
-          </div>
+          <a
+            href="/writing"
+            className="mb-3 inline-block font-serif text-xl font-semibold text-accent-600 hover:text-accent-700 hover:underline"
+          >
+            Recent Writing
+            <span className="ml-2">&gt;&gt;</span>
+          </a>
           <ul className="space-y-3">
             {recentPosts.map((post) => (
               <li key={post.slug} className="rounded-lg border border-line bg-white/60 p-4 shadow-sm">
